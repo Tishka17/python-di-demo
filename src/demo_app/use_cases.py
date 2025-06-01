@@ -1,6 +1,7 @@
 from dataclasses import dataclass
 
-from .dao import UserDAO, LinkDAO, TransactionManager
+from .dao import UserDAO, LinkDAO
+from .protocols import TransactionManager
 
 
 @dataclass

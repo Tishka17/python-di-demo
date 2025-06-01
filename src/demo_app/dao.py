@@ -1,5 +1,5 @@
 from sqlite3 import Connection
-
+from typing import Protocol
 
 class UserDAO:
     def __init__(self, connection: Connection):
@@ -19,15 +19,6 @@ class LinkDAO:
         cursor = self.connection.cursor()
         cursor.execute("insert into links(user_id, link) values (?, ?)", (user_id, link))
         return cursor.lastrowid
-
-
-class TransactionManager:
-    def __init__(self, connection: Connection):
-        self.connection = connection
-
-    def commit(self):
-        self.connection.commit()
-
 
 def create_tables(connection: Connection):
     cursor = connection.cursor()

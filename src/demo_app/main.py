@@ -3,11 +3,14 @@ from contextlib import asynccontextmanager
 from dataclasses import dataclass
 from sqlite3 import connect, Connection
 
-from dishka import Provider, Scope, provide_all, provide, from_context, make_async_container
+from dishka import (
+    Provider, Scope, provide_all, provide, from_context, make_async_container, alias,
+)
 from dishka.integrations.fastapi import setup_dishka
 from fastapi import FastAPI
 
-from .dao import UserDAO, TransactionManager, LinkDAO, create_tables
+from .dao import UserDAO, LinkDAO, create_tables
+from .protocols import TransactionManager
 from .use_cases import UserService
 from .view import router
 
@@ -21,7 +24,8 @@ class AllProvider(Provider):
     scope = Scope.REQUEST
 
     config = from_context(Config, scope=Scope.APP)
-    dao = provide_all(UserDAO, TransactionManager, LinkDAO)
+    dao = provide_all(UserDAO, LinkDAO)
+
     services = provide_all(UserService)
 
     @provide
@@ -29,6 +33,8 @@ class AllProvider(Provider):
         c = connect(config.db_path)
         yield c
         c.close()
+
+    transaction_manager = alias(Connection, provides=TransactionManager)
 
 
 @asynccontextmanager
