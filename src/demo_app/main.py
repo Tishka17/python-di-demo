@@ -11,7 +11,7 @@ from fastapi import FastAPI
 
 from .dao import UserDAO, LinkDAO, create_tables
 from .protocols import TransactionManager
-from .use_cases import UserService
+from .use_cases import UserService, UserQueryService
 from .view import router
 
 
@@ -26,7 +26,7 @@ class AllProvider(Provider):
     config = from_context(Config, scope=Scope.APP)
     dao = provide_all(UserDAO, LinkDAO)
 
-    services = provide_all(UserService)
+    services = provide_all(UserService, UserQueryService)
 
     @provide
     def connect(self, config: Config) -> Iterator[Connection]:

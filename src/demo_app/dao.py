@@ -10,6 +10,11 @@ class UserDAO:
         cursor.execute("insert into users(name) values (?)", (name,))
         return cursor.lastrowid
 
+    def list_names(self) -> list[str]:
+        cursor = self.connection.cursor()
+        cursor.execute("select name from users")
+        return [row[0] for row in cursor.fetchall()]
+
 
 class LinkDAO:
     def __init__(self, connection: Connection):

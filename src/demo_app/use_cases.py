@@ -27,3 +27,11 @@ class UserService:
             self.link_dao.add_link(user_id, link)
         self.transaction_manager.commit()
         return user_id
+
+
+class UserQueryService:
+    def __init__(self, user_dao: UserDAO):
+        self.user_dao = user_dao
+
+    async def list_names(self) -> list[str]:
+        return self.user_dao.list_names()
